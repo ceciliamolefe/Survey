@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Survey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cssFooter.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="newcss.css">
+
+    <style>
+        
+        #datepicker {
+            border: 1px solid rgb(0, 153, 255);
+            color: black; 
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li><b><a class="active" href="form.html">Surveys</a></b></li>
+        <li style="float:right"><a href="view_survey_results.php">VIEW SURVEY RESULTS</a></li>
+        <li style="float:right"><a href="form.html" style="color: rgb(0, 153, 255);">FILL OUT SURVEY</a></li>
+
+    </ul>
+
+   
+    <form id="surveyForm" action="details_entry.php" method="post" onsubmit="return validateForm()">
+
+        <div class="title">
+            <p>Personal Details:</p>
+        </div>
+
+        <div class="item">
+            <label>Full Names</label>
+            <div></div>
+            <input type="text" id="fullnames" name="fullnames">
+        </div>
+
+        <div class="item">
+            <label>Email</label>
+            <div></div>
+            <input type="text" id="email" name="email">
+        </div>
+
+        <div class="item">
+            <label>Date of Birth</label>
+            <div></div>
+            <input type="text" id="datepicker" name="date_of_birth">
+        </div>
+
+        <div class="item">
+            <label>Contact Number</label>
+            <div></div>
+            <input type="text" id="contact_number" name="contact_number">
+        </div>
+
+        <br>
+
+        <label>
+            <p>What is your favorite food?
+            <input type="checkbox" name="favorite_food[]" value="Pizza"> Pizza
+            <input type="checkbox" name="favorite_food[]" value="Pasta"> Pasta
+            <input type="checkbox" name="favorite_food[]" value="Pap and Wors"> Pap and Wors
+            <input type="checkbox" name="favorite_food[]" value="Other"> Other</p>
+        </label>
+        <span class="error-message" id="favorite-food-error" style="display: none;">Please select at least one favorite food.</span>
+
+        <p>Please rate your level of agreement on a scale from 1 to 5, with 1 being "strongly agree" and 5 being "strongly disagree"</p>
+
+        <div></div>
+        <table style="width:62%">
+            <tr>
+                <th></th>
+                <th>Strongly Agree</th>
+                <th>Agree</th>
+                <th>Neutral</th>
+                <th>Disagree</th>
+                <th>Strongly Disagree</th>
+            </tr>
+            <tr>
+                <td>I like to watch movies</td>
+                <td align="center"><input type="radio" name="movies" value="1"></td>
+                <td align="center"><input type="radio" name="movies" value="2"></td>
+                <td align="center"><input type="radio" name="movies" value="3"></td>
+                <td align="center"><input type="radio" name="movies" value="4"></td>
+                <td align="center"><input type="radio" name="movies" value="5"></td>
+            </tr>
+            <tr>
+                <td>I like to listen to radio</td>
+                <td align="center"><input type="radio" name="radio" value="1"></td>
+                <td align="center"><input type="radio" name="radio" value="2"></td>
+                <td align="center"><input type="radio" name="radio" value="3"></td>
+                <td align="center"><input type="radio" name="radio" value="4"></td>
+                <td align="center"><input type="radio" name="radio" value="5"></td>
+            </tr>
+            <tr>
+                <td>I like to eat out</td>
+                <td align="center"><input type="radio" name="eat_out" value="1"></td>
+                <td align="center"><input type="radio" name="eat_out" value="2"></td>
+                <td align="center"><input type="radio" name="eat_out" value="3"></td>
+                <td align="center"><input type="radio" name="eat_out" value="4"></td>
+                <td align="center"><input type="radio" name="eat_out" value="5"></td>
+            </tr>
+            <tr>
+                <td>I like to watch TV</td>
+                <td align="center"><input type="radio" name="watch_TV" value="1"></td>
+                <td align="center"><input type="radio" name="watch_TV" value="2"></td>
+                <td align="center"><input type="radio" name="watch_TV" value="3"></td>
+                <td align="center"><input type="radio" name="watch_TV" value="4"></td>
+                <td align="center"><input type="radio" name="watch_TV" value="5"></td>
+            </tr>
+        </table>
+
+        <br>
+
+        <input type="submit" name="submit" value="Submit" class="submit-button">
+
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#datepicker").datepicker({
+                dateFormat: "yy-mm-dd", // customize date format
+                changeMonth: true, // allow changing of months
+                changeYear: true, // allow changing of years
+                yearRange: "-120:+0", // specify range of years correctly
+                showButtonPanel: true, // display additional buttons for navigation
+                showAnim: "slideDown", // specify animation for showing the datepicker
+                onSelect: function(dateText) {
+                    // Set the selected date to the hidden input field for form submission
+                    $("#datepicker").val(dateText);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("surveyForm").addEventListener("submit", function(event) {
+                if (!validateForm()) {
+                    event.preventDefault(); // Prevent form submission
+                }
+            });
+        });
+
+        function validateForm() {
+            var fullnames = document.getElementById("fullnames").value;
+            var email = document.getElementById("email").value;
+            var date_of_birth = document.getElementById("datepicker").value;
+            var contact_number = document.getElementById("contact_number").value;
+
+            // Check if any field is empty
+            if (fullnames === "" || email === "" || date_of_birth === "" || contact_number === "") {
+                alert("All fields are required");
+                return false;
+            }
+
+            // Calculate age
+            var dob = new Date(date_of_birth);
+            var today = new Date();
+            var age = today.getFullYear() - dob.getFullYear();
+            var monthDiff = today.getMonth() - dob.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+
+            // Check if age is within the range
+            if (age < 5 || age > 120) {
+                alert("Minimum age is 5 years and maximum age is 120 years");
+                return false;
+            }
+
+            // Check if any rating fields are not filled
+var ratingGroups = ['movies', 'radio', 'eat_out', 'watch_TV'];
+var isAnyRatingEmpty = false;
+
+ratingGroups.forEach(function(groupName) {
+    var groupRadios = document.querySelectorAll('input[type="radio"][name="' + groupName + '"]');
+    var isGroupChecked = Array.from(groupRadios).some(function(radio) {
+        return radio.checked;
+    });
+
+    if (!isGroupChecked) {
+        alert("Please rate all items in the group: " + groupName);
+        isAnyRatingEmpty = true;
+    }
+});
+
+if (isAnyRatingEmpty) {
+    return false; // Prevent form submission
+}
+
+
+
+            return !isAnyRatingEmpty; // Return false only if any rating is empty
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var favoriteFoodCheckboxes = document.querySelectorAll('input[name="favorite_food[]"]');
+            var errorMessage = document.getElementById('favorite-food-error');
+
+            // Function to check if any checkbox is checked
+            function isAnyCheckboxChecked() {
+                for (var i = 0; i < favoriteFoodCheckboxes.length; i++) {
+                    if (favoriteFoodCheckboxes[i].checked) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            // Function to show or hide error message based on checkbox state
+            function toggleErrorMessage() {
+                if (isAnyCheckboxChecked()) {
+                    errorMessage.style.display = 'none';
+                } else {
+                    errorMessage.style.display = 'block';
+                }
+            }
+
+            // Event listener to toggle error message on checkbox change
+            for (var i = 0; i < favoriteFoodCheckboxes.length; i++) {
+                favoriteFoodCheckboxes[i].addEventListener('change', toggleErrorMessage);
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>
