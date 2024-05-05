@@ -177,19 +177,19 @@
                 return false;
             }
 
-            // Check if any rating fields are not filled
+           // Check if any rating fields are not filled
 var ratingGroups = ['movies', 'radio', 'eat_out', 'watch_TV'];
 var isAnyRatingEmpty = false;
+var errorMessageShown = false; // New variable to track if error message has been shown
 
 ratingGroups.forEach(function(groupName) {
-    var groupRadios = document.querySelectorAll('input[type="radio"][name="' + groupName + '"]');
-    var isGroupChecked = Array.from(groupRadios).some(function(radio) {
-        return radio.checked;
-    });
+    var groupRadios = document.querySelectorAll('input[name="' + groupName + '"]:checked');
 
-    if (!isGroupChecked) {
-        alert("Please rate all items in the group: " + groupName);
+    if (groupRadios.length === 0 && !errorMessageShown) { // Check if error message has been shown
+        alert("Please rate all items in the group: " + groupName.replace('_', ' '));
         isAnyRatingEmpty = true;
+        errorMessageShown = true; // Set errorMessageShown to true after displaying the message
+        return; // Exit the loop
     }
 });
 
@@ -199,8 +199,10 @@ if (isAnyRatingEmpty) {
 
 
 
+
+
             return !isAnyRatingEmpty; // Return false only if any rating is empty
-        }
+}  
     </script>
 
     <script>
